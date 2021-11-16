@@ -1,0 +1,65 @@
+plugins {
+    id 'java'
+}
+
+group = 'me.funayd'
+version = '0.4'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+    maven {
+        name = 'jitpack.io'
+        url = 'https://jitpack.io'
+    }
+}
+configurations {
+    extraLibs
+}
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
+    compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
+    compileOnly 'org.openjdk.nashorn:nashorn-core:15.3'
+    compileOnly 'org.jetbrains:annotations:23.0.0'
+    extraLibs 'org.openjdk.nashorn:nashorn-core:15.3'
+    extraLibs 'org.jetbrains:annotations:23.0.0'
+}
+jar {
+    from {
+        exclude '**/module-info.class'
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+def targetJavaVersion = 8
+
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release = targetJavaVersion
+    }
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    compileJava.options.encoding = 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}

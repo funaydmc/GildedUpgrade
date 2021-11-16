@@ -1,0 +1,15 @@
+#Key License:
+license: XXXX-XXXX-XXXX-XXXX
+version: 3
+auto_update: true
+debug: false
+reopen_when_sucess: true
+reopen_when_sucess_delay: 10 #tick
+reopen_when_failed: true
+reopen_when_failed_delay: 10 #tick
+use_vault: true
+cost_modifier: 1
+gui_name: '&aGilded Upgrade'
+gui_data:
+
+

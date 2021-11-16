@@ -1,0 +1,71 @@
+value: '@100+2*{level}@'
+max_level: 10
+material: iron_sword
+unbreak: true
+fallback: false  # *true/false** nếu là true, khi nâng cấp thất bại, item sẽ trở về cấp 1
+custommodeldata: '@{level}+1000@'
+name: '&cDemo sword &alv.{level}'
+lore:
+  - '&9this just is example item'
+  - '&9you can use javascript here too'
+  - '&9HH{level} <- this is holder'
+enchant:
+  - DAMAGE_ALL:{level}
+att:
+  - name:attack_damage;amount:@7+0.5*{level}@;operation:1;equipments:hand;
+#
+#  name: armor,armor_toughness,attack_damage,attack_knockback,attack_speed,
+#        flying_speed,knockback_resistance,luck,max_health,movement_speed
+#  operation: 1 -> final = base + operation ## 0.5 -> +0.5
+#             2 -> final = base + base * operation ## 0.5 -> +50%
+#             3 -> same number two :v
+#  equipments: hand,off_hand,head,chest,legs,feed or any
+#
+# if you don't know, the influence of the attribute is behind the effect
+# and before the enchant. that means initial damage is one, then added
+# by strenght then plus attribute and last is plus enchant.
+#
+holder:
+  HH1: first level
+  HH2: second level
+  HH3: third level
+  HH4: fourth level
+  HH5: fifth level
+  HH6: sixth level
+  HH7: seventh level
+  HH8: eighth level
+  HH9: ninth level
+  HH10: final level
+flag:
+  - HIDE_UNBREAKABLE
+upgrade_event:        #see task.yml
+  true: thanhcong
+  false: thatbai
+  true10: Congratulations
+#  - HIDE_ATTRIBUTES
+#  - HIDE_ENCHANTS
+#  - HIDE_DESTROYS
+#  - HIDE_PLACED_ON
+#  - HIDE_POTION_EFFECTS
+#nbt:
+#  compound-custom:
+#    int-CustomInt: 1
+#    string-CustomString: test string
+#    float-CustomFloat: 2.0
+#    double-CustomDouble: 4.0
+#    listint-CustomInt:
+#      - 1
+#      - 2
+#      - 3
+#    liststring-CustomString:
+#      - test string 1
+#      - test string 2
+#    listfloat-CustomFloat:
+#      - 1.0
+#      - 2.0
+#      - 3.0
+#    listdouble-CustomDouble:
+#      - 1.0
+#      - 2.0
+#      - 3.0
+

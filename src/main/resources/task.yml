@@ -1,0 +1,17 @@
+testmsg: '[msg]&ahello world'
+testsound: '[sound]ENTITY_SHEEP_AMBIENT;1;1'  # [sound]<name>;<pitch>;<volume> -> pitch and volume if missing will be 1
+testcmd:  '[cmd]me hooray'
+testopcmd: '[opcmd]gamemode create'
+testconsole: '[console]say nice day'
+testtitle: '[title]&eHELLO;&awhat`s your name ?;10;20;10' #[title]<title><subtitle><fadein><stay><fadeout> -> default 20;60;20
+testglobal: '[global]&cnyahahahaha'
+testmultitask:
+  - '[sound]ITEM_TOTEM_USE;1;1'
+  - '[msg]&6Congratulations'
+Congratulations:
+  - '[msg]&6Congratulations'
+  - '[msg]&6You have successfully upgraded to final level'
+thanhcong:
+  - '[msg]&aNâng cấp thành công'
+thatbai:
+  - '[msg]&cNâng cấp thất bại'

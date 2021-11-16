@@ -1,0 +1,43 @@
+name: GildedUpgrade
+api-version: 1.16
+version: '${version}'
+main: me.funayd.gildedupgrade.GildedUpgrade
+authors: [ funayd, godcraft998 ]
+commands:
+  gildedupgrade:
+    description: Main-Command
+    aliases: [gu, gUpgrade]
+    permission: "gildedupgrade.use"
+
+
+permissions:
+  gildedupgrade.admin:
+    default: op
+    children:
+      gildedupgrade.load:
+        default: op
+      gildedupgrade.debug:
+        default: op
+      gildedupgrade.get:
+        default: op
+      gildedupgrade.getnex:
+        default: op
+      gildedupgrade.help:
+        default: op
+      gildedupgrade.setsocket:
+        default: op
+      gildedupgrade.uptest:
+        default: op
+      gildedupgrade.viewnbt:
+        default: op
+      gildedupgrade.generator:
+        default: op
+      gildedupgrade.edit:
+        default: op
+      gildedupgrade.reload:
+        default: op
+      gildedupgrade.use:
+        default: true
+
+softdepend:
+  - Vault
