@@ -17,7 +17,7 @@ public class JavaScript {
         try { return String.valueOf(engine.eval(script));
         } catch ( NullPointerException | ScriptException e ) {
             System.out.println("GiledUpgrade Error: Engine is error -> disable plugin . . .");
-            Bukkit.getPluginManager().disablePlugin(GildedUpgrade.getInstant());
+            Bukkit.getPluginManager().disablePlugin(GildedUpgrade.getInstance());
             return null;
         }
     }

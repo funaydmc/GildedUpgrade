@@ -9,7 +9,7 @@ reopen_when_failed: true
 reopen_when_failed_delay: 10 #tick
 use_vault: true
 cost_modifier: 1
-gui_name: '&aGilded Upgrade'
-gui_data:
+tree_constructs:
+
 
 

@@ -1,10 +1,10 @@
 package me.funayd.gildedupgrade.nbtapi;
 
+import java.io.InputStream;
+
 import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ClassWrapper;
 import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ObjectCreator;
 import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ReflectionMethod;
-
-import java.io.InputStream;
 
 /**
  * A Standalone {@link NBTCompound} implementation. All data is just kept inside

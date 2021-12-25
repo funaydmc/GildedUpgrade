@@ -1,11 +1,9 @@
 package me.funayd.gildedupgrade.contruct;
 
 import me.funayd.gildedupgrade.data.StorageManager;
-import me.funayd.gildedupgrade.data.YamlFile;
 import me.funayd.gildedupgrade.util.Debug;
 import me.funayd.gildedupgrade.util.Logger;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.*;
 
@@ -18,11 +16,13 @@ public class Tree {
         this.id = id;
     }
 
-    public Tree load(){
+    public Tree load(ConfigurationSection section){
         Debug.log("load tree "+id);
-        FileConfiguration data = YamlFile.TREES.get();
-        ConfigurationSection t = data.getConfigurationSection(id);
-        recursive(t);
+        if (section==null) {
+            Debug.log("this tree is null ?");
+            return this;
+        }
+        recursive(section);
         save();
         return this;
     }
@@ -30,26 +30,27 @@ public class Tree {
     private void recursive(ConfigurationSection c){
         Debug.log(" scaning "+c.getCurrentPath());
         Set<String> data = c.getKeys(false);
-        data.forEach(s -> {
-            if (c.isString(s)) {
-                if (tree.keySet().size()==0){
-                    tree.put(new Line(s,this),new HashSet<>());
-                    return;
-                }
+        loadLine(c.getName(),c);
+        data.forEach(s -> loadLine(s,c));
+    }
+    private void loadLine(String s, ConfigurationSection c){
+        if (c.isString(s)) {
+            if (tree.keySet().size()==0){
+                tree.put(new Line(s,this),new HashSet<>());
                 return;
             }
-            Set<String> lineid = c.getConfigurationSection(s).getKeys(false);
-            Set<Line> lines = new HashSet<>();
-            lineid.forEach(ss -> lines.add(new Line(ss,this)));
-            tree.put(new Line(s,this),lines);
-            recursive(c.getConfigurationSection(s));
-        });
+            return;
+        }
+        Set<String> lineid = Objects.requireNonNull(c.getConfigurationSection(s)).getKeys(false);
+        Set<Line> lines = new HashSet<>();
+        lineid.forEach(ss -> lines.add(new Line(ss,this)));
+        tree.put(new Line(s,this),lines);
+        recursive(Objects.requireNonNull(c.getConfigurationSection(s)));
     }
 
     public Set<Line> getnext(Line line){
         return tree.get(line);
     }
-
     public List<String> getnext(String line){
         List<String> next = new ArrayList<>();
         if (!StorageManager.lines.containsKey(line)) return next;
@@ -58,9 +59,7 @@ public class Tree {
         tree.get(lines).forEach(l -> next.add(l.getId()));
         return next;
     }
-
     public List<String> getline(){
-
         List<String> allLine = new ArrayList<>();
         tree.forEach((k,v) -> {
             if (!allLine.contains(k.getId()))
@@ -71,7 +70,6 @@ public class Tree {
         });
         return allLine;
     }
-
     public void save(){
         Set<Line> allLine = new HashSet<>();
         tree.forEach((k,v) -> {
@@ -81,7 +79,6 @@ public class Tree {
         allLine.forEach(Line::save);
         Logger.Info("save tree");
     }
-
     public String getId() {
         return id;
     }

@@ -1,9 +1,9 @@
 package me.funayd.gildedupgrade.nbtapi.utils.annotations;
 
+import java.lang.reflect.Method;
+
 import me.funayd.gildedupgrade.nbtapi.NbtApiException;
 import me.funayd.gildedupgrade.nbtapi.utils.MinecraftVersion;
-
-import java.lang.reflect.Method;
 
 public class CheckUtil {
 

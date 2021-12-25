@@ -101,14 +101,16 @@ public class UpgradeGui{
         return inv;
     }
     private String filter(String string) {
+
         if (string==null) return null;
         if (string.equals(" ")) return " ";
         return string.replace("%cost%",cost()).replace("%chance%",chance());
     }
     private String cost(){
+        if (!config.usevaut) return " ";
         double cost = Math.round(gui.handler.handler.cost()*100)/100D;
-        if (cost> VaultEco.getbal(gui.owner))
-            return Color.vanilla("&c"+cost);
+        if (cost>VaultEco.getbal(gui.owner))
+        return Color.vanilla("&c"+cost);
         return Color.vanilla("&a"+cost);
     }
     private String chance() {

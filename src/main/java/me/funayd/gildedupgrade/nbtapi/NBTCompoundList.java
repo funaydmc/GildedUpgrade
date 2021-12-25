@@ -3,7 +3,6 @@ package me.funayd.gildedupgrade.nbtapi;
 import me.funayd.gildedupgrade.nbtapi.utils.MinecraftVersion;
 import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ClassWrapper;
 import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ReflectionMethod;
-import org.apache.commons.lang.NotImplementedException;
 
 /**
  * {@link NBTListCompound} implementation for NBTLists
@@ -69,7 +68,7 @@ public class NBTCompoundList extends NBTList<NBTListCompound> {
 	@Override
 	public void add(int index, NBTListCompound element) {
 		if (element != null) {
-			throw new NotImplementedException("You need to pass null! ListCompounds from other lists won't work.");
+			throw new NbtApiException("You need to pass null! ListCompounds from other lists won't work.");
 		}
 		try {
 			Object compound = ClassWrapper.NMS_NBTTAGCOMPOUND.getClazz().newInstance();
@@ -96,7 +95,7 @@ public class NBTCompoundList extends NBTList<NBTListCompound> {
 
 	@Override
 	public NBTListCompound set(int index, NBTListCompound element) {
-		throw new NotImplementedException("This method doesn't work in the ListCompound context.");
+		throw new NbtApiException("This method doesn't work in the ListCompound context.");
 	}
 
 	@Override

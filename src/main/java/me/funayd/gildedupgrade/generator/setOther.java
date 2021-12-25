@@ -5,6 +5,7 @@ import me.funayd.gildedupgrade.data.Lang;
 import me.funayd.gildedupgrade.nbtapi.NBTCompound;
 import me.funayd.gildedupgrade.nbtapi.NBTItem;
 import me.funayd.gildedupgrade.util.Color;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,27 +25,9 @@ public class setOther {
         NBTItem nbt = new NBTItem(item);
         if (!nbt.getKeys().contains("GUpgrade")) nbt.addCompound("GUpgrade");
         NBTCompound compound = nbt.getCompound("GUpgrade");
-        compound.setString("id","so-socket");
-        compound.setInteger("value",value);
+        compound.setInteger("socket-value",value);
         nbt.applyNBT(item);
-    }
-    public static void ticket(Player p,String generator){
-        File folder = new File(GildedUpgrade.getInstant().getDataFolder(), "generator");
-        List<String> list = Arrays.asList(Objects.requireNonNull(folder.list()));
-        if (!list.contains(generator+".yml")) {
-            p.sendMessage(Color.vanilla("&eillegal generator"));
-            return;
-        }
-        ItemStack item = p.getInventory().getItemInMainHand();
-        if (item.getType().toString().equals("AIR")) {
-            p.sendMessage(Lang.get("noitem"));
-            return;
-        }
-        NBTItem nbt = new NBTItem(item);
-        if (!nbt.getKeys().contains("GUpgrade")) nbt.addCompound("GUpgrade");
-        NBTCompound compound = nbt.getCompound("GUpgrade");
-        compound.setString("id","ti-"+generator);
-        nbt.applyNBT(item);
+        p.sendMessage(ChatColor.GREEN+"Đã thiết lập item trên tay bạn thành socket có giá trị "+value);
     }
 
 }

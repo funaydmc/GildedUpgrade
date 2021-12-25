@@ -1,9 +1,10 @@
 package me.funayd.gildedupgrade.nbtapi;
 
-import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ReflectionMethod;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ReflectionMethod;
 
 /**
  * NBT class to access vanilla/custom tags on ItemStacks. This class doesn't
@@ -15,7 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class NBTItem extends NBTCompound {
 
 	private ItemStack bukkitItem;
-	private final boolean directApply;
+	private boolean directApply;
 	private ItemStack originalSrcStack = null;
 
 	/**

@@ -1,17 +1,19 @@
 package me.funayd.gildedupgrade.nbtapi;
 
-import me.funayd.gildedupgrade.nbtapi.utils.MinecraftVersion;
-import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ReflectionMethod;
-import org.bukkit.inventory.ItemStack;
-
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import org.bukkit.inventory.ItemStack;
+
+import me.funayd.gildedupgrade.nbtapi.utils.MinecraftVersion;
+import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ReflectionMethod;
 
 /**
  * Base class representing NMS Compounds. For a standalone implementation check
@@ -26,8 +28,8 @@ public class NBTCompound {
 	private final Lock readLock = readWriteLock.readLock();
 	private final Lock writeLock = readWriteLock.writeLock();
 
-	private final String compundName;
-	private final NBTCompound parent;
+	private String compundName;
+	private NBTCompound parent;
 
 	protected NBTCompound(NBTCompound owner, String name) {
 		this.compundName = name;

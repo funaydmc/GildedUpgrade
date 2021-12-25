@@ -25,7 +25,6 @@ public class InputHandler {
         if (item==null||item.getType().toString().equals("AIR")) return "null";
         if (handler.isupgradeable(item)) return additem(item);
         if (handler.isSocket(item))      return addsocket(item);
-        if (handler.isTicket(item))      return addticket(item);
         return "null";
     }
     public String   additem(ItemStack item){
@@ -35,16 +34,6 @@ public class InputHandler {
         handler.setUpgradeitem(item.clone());
         item.setAmount(item.getAmount()-1);
         return "item";
-    }
-    public String   addticket(ItemStack item){
-        if (handler.ticket!=null)
-        return "null";
-
-        if (!handler.isInvalidTicket(item))
-        return "null";
-
-        handler.setTicket(item);
-        return "ticket";
     }
     public String   addsocket(ItemStack item){
         handler.addSocket(item);    // try to add socket to handler

@@ -1,12 +1,12 @@
 package me.funayd.gildedupgrade.nbtapi.utils.annotations;
 
-import me.funayd.gildedupgrade.nbtapi.utils.MinecraftVersion;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import me.funayd.gildedupgrade.nbtapi.utils.MinecraftVersion;
 
 @Retention(RUNTIME)
 @Target({ METHOD })

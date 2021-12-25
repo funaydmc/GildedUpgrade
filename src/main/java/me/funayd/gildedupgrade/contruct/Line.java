@@ -21,7 +21,7 @@ public class Line {
     public Line(String id,Tree tree){
         this.id = id;
         this.tree = tree;
-        Generator generator = new Generator(new StringBuilder(id).delete(0,3).toString());
+        Generator generator = new Generator(id);
         this.items = generator.active(this);
         if (this.items==null) return;
         StorageManager.lines.put(id,this);

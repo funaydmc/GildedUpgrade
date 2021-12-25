@@ -167,6 +167,7 @@ public class Generator {
             GildedItem thisiteminfo = items[i];
             thisiteminfo.address(address);   //gán địa chỉ cho item
             if (!YamlFile.LINES.get().contains(address)){
+                if (line.getTree()!=null)
                 YamlFile.LINES.get().set(address+".tree",line.getTree().getId());
                 YamlFile.LINES.save();
                 YamlFile.LINES.reload();
@@ -208,12 +209,12 @@ public class Generator {
             items[i] = thisiteminfo;
         }
 
-        Logger.Info("Apply generator for line "+line.getId());
+        Logger.Info(" Complete generation for line "+line.getId());
         return Arrays.asList(items);
     }
     private YamlConfiguration getGenerator(String id){
         Debug.log("Get generator : "+id);
-        File file = new File(GildedUpgrade.getInstant().getDataFolder(), "generator/"+id+".yml");
+        File file = new File(GildedUpgrade.getInstance().getDataFolder(), "generator/"+id+".yml");
         if (!file.exists()) return null;
         return YamlConfiguration.loadConfiguration(file);
     }

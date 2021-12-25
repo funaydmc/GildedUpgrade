@@ -74,10 +74,11 @@ public class DefaultInventory {
         inv.setItem(confirm,confirm());
         return inv;
     }
-    public static String getBase64(){
+    public static List<String> getBase64(){
         return byteConvert.inventoryToString(INV());
     }
-    public static Inventory inventoryParse(String base64){
-        return byteConvert.stringToInventory(base64);
+    public static Inventory inventoryParse(List<String> base64){
+        String source = String.join("",base64);
+        return byteConvert.stringToInventory(source);
     }
 }

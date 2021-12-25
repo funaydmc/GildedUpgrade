@@ -1,9 +1,15 @@
 package me.funayd.gildedupgrade.nbtapi;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+
 import me.funayd.gildedupgrade.nbtapi.utils.MinecraftVersion;
 import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ReflectionMethod;
-
-import java.util.*;
 
 /**
  * Abstract List implementation for ListCompounds
@@ -14,9 +20,9 @@ import java.util.*;
  */
 public abstract class NBTList<T> implements List<T> {
 
-	private final String listName;
-	private final NBTCompound parent;
-	private final NBTType type;
+	private String listName;
+	private NBTCompound parent;
+	private NBTType type;
 	protected Object listObject;
 
 	protected NBTList(NBTCompound owner, String name, NBTType type, Object list) {

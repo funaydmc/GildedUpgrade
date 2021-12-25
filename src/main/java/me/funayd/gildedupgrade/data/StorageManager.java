@@ -17,10 +17,12 @@ public class StorageManager {
     public static HashMap<String, Line> lines = new HashMap<>();
     public static HashMap<String, Tree> trees = new HashMap<>();
     public static HashMap<String, getTask> task = new HashMap<>();
-    public static HashMap<String, String> name = new HashMap<>();
-    public static HashMap<String, List<String>> lore = new HashMap<>();
-    public static HashMap<Player, String> language = new HashMap<>();
+    public static void clear(){
+        items.clear();
+        lines.clear();
+        trees.clear();
+        task.clear();
+    }
 
-
-    public static YamlConfiguration taskconfig = YamlConfiguration.loadConfiguration(new File(GildedUpgrade.getInstant().getDataFolder(), "task.yml"));
+    public static YamlConfiguration taskconfig = YamlConfiguration.loadConfiguration(new File(GildedUpgrade.getInstance().getDataFolder(), "task.yml"));
 }

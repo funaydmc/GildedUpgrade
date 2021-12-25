@@ -17,16 +17,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class Commands implements CommandExecutor {
 
@@ -38,33 +34,6 @@ public class Commands implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (args.length>0 && args[0].equals("registor")) return reload(sender);
-        if (!GildedUpgrade.getActive().equals(LicenseKey.KeyState.ACTIVE)) {
-            if (sender instanceof ConsoleCommandSender|| sender.isOp())
-                if (args.length>0 && args[0].equals("active")) {
-                    if (args.length<2||args[1]==null){
-                        msg(sender,"/gu active <license key>");
-                        return false;
-                    }
-                    plugin.getConfig().set("license",args[1]);
-                    plugin.saveConfig();
-                    GildedUpgrade.getInstant().load();
-                    switch (GildedUpgrade.getActive()){
-                        case ACTIVE:msg(sender,"&aPlugin đã được kích hoạt.");break;
-                        case NULL:msg(sender,"&cPlugin chưa được kích hoạt. Licence key bị thiếu!"); break;
-                        case INCORRECT:msg(sender,"&cPlugin chưa được kích hoạt. Licence key bị sai!"); break;
-                        case OTHER_ACTIVE:msg(sender,"&cPlugin chưa được kích hoạt. Licence key đã được sử dụng! Nếu bạn sở hữu plugin này, hãy truy cập https://www.dihoastore.com/ và làm mới key."); break;
-                    }
-                    return true;
-                }
-                else
-                switch (GildedUpgrade.getActive()){
-                    case NULL:sender.sendMessage(Color.vanilla("&cPlugin chưa được kích hoạt. Licence key bị thiếu!")); break;
-                    case INCORRECT:sender.sendMessage(Color.vanilla("&cPlugin chưa được kích hoạt. Licence key bị sai!")); break;
-                    case OTHER_ACTIVE:sender.sendMessage(Color.vanilla("&cPlugin chưa được kích hoạt. Licence key đã được sử dụng! Nếu bạn sở hữu plugin này, hãy truy cập https://www.dihoastore.com/ và làm mới key.")); break;
-                }
-            else sender.sendMessage(Color.vanilla("&cPlugin hiện không hoạt động hoặc bảo tri!"));
-            return false;
-        }
         if (args.length == 0) {
             if (!(sender instanceof Player)) return false;
             new GUI((Player) sender,plugin).open();
@@ -134,50 +103,16 @@ public class Commands implements CommandExecutor {
     }
     private boolean reload(CommandSender sender) {
         if (sender.hasPermission("gildedupgrade.reload")||sender instanceof ConsoleCommandSender){
-            Bukkit.getPluginManager().disablePlugin(plugin);
-            Bukkit.getPluginManager().enablePlugin(plugin);
-            sender.sendMessage("Plugin đã được tải lại.");
+            GildedUpgrade.reload();
         }
         return true;
     }
     private boolean generator(CommandSender sender, String[] args) {
-        if (!Arrays.asList("import","remove").contains(args[1])){
-            List<String> title = Arrays.asList(
-                    "/gu generator import <id>",
-                    "/gu generator remove <id>"
-            );
-            title.forEach(s -> msg(sender,s));
+        if (args.length==1||!Arrays.asList("import","remove").contains(args[1])){
+            msg(sender,"/gu generator import <id>");
         }
         if (args[1].equals("import")) return render(sender,args);
-        if (args[1].equals("remove")) return removegen(sender,args);
         return false;
-    }
-    private boolean removegen(CommandSender sender, String[] args) {
-        if (!sender.hasPermission("gildedupgrade.generator")) {
-            msg(sender,"Bạn cần phải có quyền để thực hiện lệnh này (gildedupgrade.generator)");
-            return false;
-        }
-        File generator = new File(plugin.getDataFolder(),"generator/"+args[2]+".yml");
-        if (!generator.exists()) {
-            msg(sender,"Generator này không tồn lại");
-            return false;
-        }
-        if (generator.delete()) msg(sender,"remove sucessfull");
-        if (YamlFile.LINES.get().getKeys(false).contains("li-"+args[2])){
-            YamlFile.LINES.get().set("li-"+args[2],null);
-            FileConfiguration treeconfig = YamlFile.TREES.get();
-            String path = find(treeconfig,"li-" + args[2]);
-            if (path==null) return true;
-            Set<String> keys = Objects.requireNonNull(treeconfig.getConfigurationSection(path)).getKeys(false);
-
-            for (String key : keys) {
-                Object config = Objects.requireNonNull(treeconfig.getConfigurationSection(path)).get(key);
-                treeconfig.set(path+"."+key,config);
-            }
-            YamlFile.TREES.save();
-            YamlFile.TREES.reload();
-        }
-        return true;
     }
     private boolean render(CommandSender sender,String[] args) {
         if (!sender.hasPermission("gildedupgrade.generator")) {
@@ -274,13 +209,13 @@ public class Commands implements CommandExecutor {
             return false;
         }
         Player player = (Player) sender;
-        if (args.length == 1) {
-            //send message trees help
+        if (args.length <= 2) {
+            msg(sender,"/gu get <line> <level>");
             return false;
-        }else if (args.length > 3) {
+        }else {
             player.getInventory().addItem(
-            StorageManager.lines.get(args[2])
-            .getItems(Integer.parseInt(args[3])-1).getItem());
+            StorageManager.lines.get(args[1])
+            .getItems(Integer.parseInt(args[2])-1).getItem());
         }
         return false;
     }

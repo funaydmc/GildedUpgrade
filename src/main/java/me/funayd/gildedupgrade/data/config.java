@@ -23,7 +23,7 @@ public class config {
 
     public static void loadconfig(){
         YamlConfiguration config = YamlConfiguration.loadConfiguration(
-        new File(GildedUpgrade.getInstant().getDataFolder(),"config.yml"));
+        new File(GildedUpgrade.getInstance().getDataFolder(),"config.yml"));
 
         autoupdate = config.getBoolean("auto_update",true);
         reopenfailed = config.getBoolean("reopen_when_failed",false);
@@ -33,8 +33,8 @@ public class config {
         Debug.debugmode = config.getBoolean("debug",false);
         usevaut = config.getBoolean("use_vault",false);
         costmodifier = config.getDouble("cost_modifier",1);
-        inv_name =  Color.vanilla(config.getString("gui_name","&aGilded Upgrade"));
-        inv = DefaultInventory.inventoryParse(config.getString("gui_data"));
+        inv_name =  Color.vanilla(GildedUpgrade.guiConfig().getString("gui_name","&aGilded Upgrade"));
+        inv = DefaultInventory.inventoryParse(GildedUpgrade.guiConfig().getStringList("gui_data"));
     }
 
     public static Inventory getInv(){

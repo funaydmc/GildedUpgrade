@@ -5,11 +5,11 @@ import me.funayd.gildedupgrade.Event.ItemUpdate;
 import me.funayd.gildedupgrade.Upgrader.DefaultInventory;
 import me.funayd.gildedupgrade.command.Commands;
 import me.funayd.gildedupgrade.command.TabComplete;
-import me.funayd.gildedupgrade.data.DataLoader;
-import me.funayd.gildedupgrade.data.Lang;
-import me.funayd.gildedupgrade.data.LicenseKey;
-import me.funayd.gildedupgrade.data.config;
+import me.funayd.gildedupgrade.data.*;
+import me.funayd.gildedupgrade.nbtapi.utils.MinecraftVersion;
+import me.funayd.gildedupgrade.util.OtherUtill;
 import me.funayd.gildedupgrade.util.JavaScript;
+import me.funayd.gildedupgrade.util.Logger;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,132 +17,88 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 
 
 public final class GildedUpgrade extends JavaPlugin {
 
-    private static GildedUpgrade instant;
-    private static Economy econ;
-    private static String key;
-    private static LicenseKey.KeyState active;
-    private boolean loaded = false;
-    private boolean checked = false;
-    public static LicenseKey.KeyState getActive() {
-        return active;
-    }
-    public static final JavaScript engine = new JavaScript();
+    public static OtherUtill activator;
 
+    private static GildedUpgrade instance;
+    private static Economy econ;
+    public static final JavaScript engine = new JavaScript();
     @Override
     public void onEnable() {
-            instant = this;
-            this.saveDefaultConfig();
-            new Commands(instant);
-            new TabComplete();
-            Bukkit.getScheduler().scheduleSyncRepeatingTask(this,this::load,0,12000);
-    }
-    public void load(){
-        if (!loaded) {
-            key = instant.getConfig().getString("license", "XXXX-XXXX-XXXX-XXXX");
-            loadPlugin();
-            createDefault();
-            reload();
-			Lang.load(this);
-            Bukkit.getPluginManager().registerEvents(new ItemUpdate(), this);
-            if (!setupEconomy()) config.usevaut = false;
-            loaded = true;
-        }
+        instance = this;
+        MinecraftVersion.getVersion();
+        this.saveDefaultConfig();
+        new Commands(instance);
+        new TabComplete();
+        createDefault();
+        reload();
+        Lang.load(this);
+        if (!setupEconomy()) config.usevaut = false;
+        Bukkit.getPluginManager().registerEvents(new ItemUpdate(), this);
+
     }
     @Override
     public void onDisable() {
         Bukkit.getPluginManager().callEvent(new DisableEvent());
-        if (getActive().equals(LicenseKey.KeyState.ACTIVE))
-        LicenseKey.action(key, "disable");
-    }
-    private void loadPlugin(){
-        if (key == null || key.equals("XXXX-XXXX-XXXX-XXXX")) {
-            if (checked) return;
-            Bukkit.getConsoleSender().sendMessage("§e" + LicenseKey.plugins + ": §eYou have not entered license key!");
-            Bukkit.getConsoleSender().sendMessage("§e" + LicenseKey.plugins + ": §ePlease add it to the file config.yml");
-            Bukkit.getConsoleSender().sendMessage("§e" + LicenseKey.plugins + ": §eThen reload the plugin.");
-            active = LicenseKey.KeyState.NULL;
-            checked = true;
-            return;
-        }
-        if (LicenseKey.KeyStatus(key)) {
-            if (LicenseKey.action(key, "enable")) {
-                active = LicenseKey.KeyState.ACTIVE;
-                Bukkit.getConsoleSender().sendMessage("§e" + LicenseKey.plugins + ": §aYour product key has been activated!");
-                Bukkit.getConsoleSender().sendMessage("§e" + LicenseKey.plugins + ": §aThank you for using our product");
-                checked = true;
-            }
-            else {
-                active = LicenseKey.KeyState.OTHER_ACTIVE;
-                if (checked) return;
-                Bukkit.getConsoleSender().sendMessage("§e" + LicenseKey.plugins + ": §The key product you entered is already in use!");
-                checked = true;
-                return;
-            }
-        }
-        else {
-            active = LicenseKey.KeyState.INCORRECT;
-            if (checked) return;
-            Bukkit.getConsoleSender().sendMessage("§e" + LicenseKey.plugins + ": §cYour product key entered is incorrect");
-            Bukkit.getConsoleSender().sendMessage("§e" + LicenseKey.plugins + ": §cPlugin has been disabled...");
-            checked = true;
-            return;
-        }
-        File aswf = new File(getDataFolder().getParentFile(), "\\AutoSaveWorld\\config.yml");
-        if (aswf.exists()) {
-            YamlConfiguration yamlConfiguration = new YamlConfiguration();
-            try {
-                yamlConfiguration.load(aswf);
-            } catch ( Exception ignored ) {
-            }
-            if (yamlConfiguration.getBoolean("networkwatcher.mainthreadnetaccess.warn")) {
-                yamlConfiguration.set("networkwatcher.mainthreadnetaccess.warn", false);
-                try {
-                    yamlConfiguration.save(aswf);
-                } catch ( Exception ignored ) {
-                }
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "asw reload");
-            }
-        }
-
-        checked = true;
+        activator.disable();
     }
     public static void reload(){
-        instant.reloadConfig();
+        instance.reloadConfig();
+        String key = instance.getConfig().getString("license", "XXXX-XXXX-XXXX-XXXX");
+        activator = new OtherUtill(key);
+        StorageManager.clear();
         config.loadconfig();
         DataLoader.load();
+        YamlFile.ITEMS.reload();
+        YamlFile.LINES.reload();
+        Bukkit.getPluginManager().callEvent(new DisableEvent());
     }
-    public static GildedUpgrade getInstant() {
-        return instant;
+    public static GildedUpgrade getInstance() {
+        return instance;
     }
     public static void createDefault(){
-        File file = new File(instant.getDataFolder(),"generator");
+        File file = new File(instance.getDataFolder(),"generator");
         if (file.exists()) return;
-        instant.saveResource("generator/Example.yml",false);
-        instant.saveResource("HuongDanSuDung.txt",false);
-        instant.saveResource("task.yml",false);
-        instant.saveResource("lang.yml",false);
-        instant.getConfig().set("gui_data", DefaultInventory.getBase64());
-        instant.saveConfig();
+        instance.saveResource("generator/Example.yml",false);
+        instance.saveResource("HuongDanSuDung.txt",false);
+        instance.saveResource("task.yml",false);
+        instance.saveResource("lang.yml",false);
+        instance.saveResource("gui.yml",false);
+        YamlConfiguration a = guiConfig();
+        a.set("gui_data", DefaultInventory.getBase64());
+        saveGui(a);
+    }
+    public static YamlConfiguration guiConfig(){
+        return YamlConfiguration.loadConfiguration(new File(instance.getDataFolder(),"gui.yml"));
+    }
+    public static void saveGui(YamlConfiguration a){
+        try {
+            a.save(new File(instance.getDataFolder(),"gui.yml"));
+            Logger.Default("saved default gui to gui.yml");
+        } catch ( IOException e ) {
+            Logger.Default("Error when try to save default gui config");
+        }
     }
     private boolean setupEconomy() {
         if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
             return false;
         }
-
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
             return false;
         }
         econ = rsp.getProvider();
-        return econ != null;
+        return true;
     }
     public static Economy geteco(){
         return econ;
     }
 
-
+    public static OtherUtill getActivator() {
+        return activator;
+    }
 }

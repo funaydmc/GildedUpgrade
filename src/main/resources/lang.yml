@@ -2,7 +2,7 @@ noitem: Không có item nào trên tay bạn
 onlyPlayer:  Lệnh này chỉ dành cho người chơi
 help:
   - '&e/gu&f: Mở menu nâng cấp'
-  - '&e/gu get <tree> <line> <level>&f: Lấy một item đã được tải'
+  - '&e/gu get <line> <level>&f: Lấy một item đã được tải'
   - '&e/gu edit&f: Tùy chỉnh upgrade gui'
   - '&e/gu load&f: Tải lại tất cat item'
   - '&e/gu debug&f: Bật/Tắt chế độ gỡ lỗi'

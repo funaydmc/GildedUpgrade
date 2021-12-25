@@ -75,7 +75,7 @@ public class GUI implements Listener {
     }
     private void reopen(long delay) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(
-                GildedUpgrade.getInstant(),()
+                GildedUpgrade.getInstance(),()
                 -> new GUI(owner, plugin).open(),
                 delay);
     }

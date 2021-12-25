@@ -27,7 +27,7 @@ public class Output {
 
     public Output(Material material,String id){
         this.material = material.toString();
-        this.file = new File(GildedUpgrade.getInstant().getDataFolder(),"generator/"+id+".yml");
+        this.file = new File(GildedUpgrade.getInstance().getDataFolder(),"generator/"+id+".yml");
         if (!this.file.exists())
             if (this.file.getParentFile().mkdir()) {
                 try {
@@ -47,7 +47,6 @@ public class Output {
     public void setUnbreak(String unbreak) {this.unbreak = unbreak;}
     public void setCustomModelData(String customModelData) {CustomModelData = customModelData;}
     public void setNbttag(NBTItem nbttag) {this.nbttag = nbttag;}
-
     public void save() throws IOException {
         config.set("value", 100);
         config.set("unbreak",unbreak);

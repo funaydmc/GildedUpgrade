@@ -7,6 +7,7 @@ import me.funayd.gildedupgrade.nbtapi.NBTItem;
 import me.funayd.gildedupgrade.util.Debug;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -16,7 +17,10 @@ public class ItemUpdate implements Listener {
 
     @EventHandler
     public void onclick(InventoryClickEvent e){
-        if (!config.autoupdate) return;
+        if (!config.autoupdate) {
+            HandlerList.unregisterAll(this);
+            return;
+        }
         update((Player) e.getWhoClicked());
     }
 

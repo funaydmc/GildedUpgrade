@@ -14,14 +14,12 @@ import java.io.InputStreamReader;
 
 public enum YamlFile {
     ITEMS("storage/items.yml"),
-    LINES("storage/lines.yml"),
-    TREES("trees.yml");
-
+    LINES("storage/lines.yml");
 
     private final String name;
     private FileConfiguration config;
     private File file;
-    private final Plugin plugin = GildedUpgrade.getInstant();
+    private final Plugin plugin = GildedUpgrade.getInstance();
 
     YamlFile(String name) {
         this.name = name;

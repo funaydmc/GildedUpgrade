@@ -1,10 +1,10 @@
 package me.funayd.gildedupgrade.nbtapi;
 
-import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ClassWrapper;
-import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ReflectionMethod;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
+import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ClassWrapper;
+import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ReflectionMethod;
 
 /**
  * Double implementation for NBTLists

@@ -65,7 +65,7 @@ public class CustomizerHandle {
         inventory.setContents(itemStacks);
     }
     public void save(){
-        File cFile = new File(GildedUpgrade.getInstant().getDataFolder(),"config.yml");
+        File cFile = new File(GildedUpgrade.getInstance().getDataFolder(),"gui.yml");
         FileConfiguration c = YamlConfiguration.loadConfiguration(cFile);
         remo();
         c.set("gui_data", byteConvert.inventoryToString(inventory));

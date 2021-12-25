@@ -2,7 +2,6 @@ package me.funayd.gildedupgrade.command;
 
 import me.funayd.gildedupgrade.GildedUpgrade;
 import me.funayd.gildedupgrade.contruct.GildedItem;
-import me.funayd.gildedupgrade.data.LicenseKey;
 import me.funayd.gildedupgrade.data.StorageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -22,12 +21,8 @@ public class TabComplete implements TabCompleter {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         List<String> tab = new ArrayList<>();
-        if (args.length == 1 && sender.isOp() && !GildedUpgrade.getActive().equals(LicenseKey.KeyState.ACTIVE)) {
-            tab.add("active");
-            return tab;
-        }
         if (args.length == 1) {
-            if (sender.isOp()) tab.add("HowToStart?");
+            if (sender.isOp()||sender.hasPermission("gildedupgrade.admin")) tab.add("HowToStart?");
             if (sender.hasPermission("gildedupgrade.get"))
                 if ("get".contains(args[0]))
             tab.add("get");
@@ -63,18 +58,11 @@ public class TabComplete implements TabCompleter {
             if (sender.hasPermission("gildedupgrade.get"))
             if (args[0].equals("get")) {
                 if (args.length==2) {
-                    List<String> tree = new ArrayList<>(StorageManager.trees.keySet());
-                    for (String t : tree) tree.set(tree.indexOf(t),t);
-                    return tree;
+                    return new ArrayList<>(StorageManager.lines.keySet());
                 }
                 if (args.length==3) {
-                    if (!StorageManager.trees.containsKey(args[1]))
-                    return Collections.singletonList("tree không tồn lại");
-                    return StorageManager.trees.get(args[1]).getline();
-                }
-                if (args.length==4) {
-                    if (!StorageManager.lines.containsKey(args[2])) return Collections.singletonList("line không tồn lại");
-                    List<GildedItem> info = StorageManager.lines.get(args[2]).getItems();
+                    if (!StorageManager.lines.containsKey(args[1])) return Collections.singletonList("line không tồn lại");
+                    List<GildedItem> info = StorageManager.lines.get(args[1]).getItems();
                     List<String> name = new ArrayList<>();
                     info.forEach(i -> name.add(String.valueOf(info.indexOf(i)+1)));
                     return name;
@@ -83,7 +71,7 @@ public class TabComplete implements TabCompleter {
             if (sender.hasPermission("gildedupgrade.setticket"))
             if (args[0].equals("setTicket")){
                 if (args.length==2) {
-                    File folder = new File(GildedUpgrade.getInstant().getDataFolder(), "generator");
+                    File folder = new File(GildedUpgrade.getInstance().getDataFolder(), "generator");
                     List<String> ids = Arrays.asList(Objects.requireNonNull(folder.list()));
                     for (String id : ids) {
                         ids.set(ids.indexOf(id),id.replace(".yml",""));
@@ -93,7 +81,7 @@ public class TabComplete implements TabCompleter {
             }
             if (sender.hasPermission("gildedupgrade.admin"))
             if (args[0].equals("generator")){
-                return Arrays.asList("import","remove");
+                return Collections.singletonList("import");
             }
         }
         return tab;

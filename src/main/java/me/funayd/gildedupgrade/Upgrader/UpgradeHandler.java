@@ -34,11 +34,6 @@ public class UpgradeHandler {
         String id = nbt.getCompound("GUpgrade").getString("id");
         this.upgradeitem = StorageManager.items.get(id);
     }
-    public void setTicket     (ItemStack ticket) {
-        if (isInvalidTicket(ticket)) {
-            this.ticket = ticket;
-        }
-    }
     public void addSocket     (ItemStack socket)     {
         if (!isSocket(socket))     return;
         Inventory inv = Bukkit.createInventory(null,27,"null");
@@ -69,26 +64,9 @@ public class UpgradeHandler {
         GildedItem info = StorageManager.items.get(id);
         return info.getNext().size() != 0;
     }
-    public boolean isTicket     (ItemStack ticket)      {
-        NBTItem nbt = new NBTItem(ticket);
-        if (!nbt.hasKey("GUpgrade")) return false;
-        String id = nbt.getCompound("GUpgrade").getString("id");
-        return id.startsWith("ti-");
-    }
     public boolean isSocket     (ItemStack socket)      {
         NBTItem nbt = new NBTItem(socket);
-        if (!nbt.hasKey("GUpgrade")) return false;
-        String id = nbt.getCompound("GUpgrade").getString("id");
-        return id.startsWith("so-");
-    }
-    public boolean isInvalidTicket(ItemStack ticket)    {
-        if (!isTicket(ticket)) return false;
-        if (this.upgradeitem==null) return false;
-        String id = new NBTItem(ticket).getCompound("GUpgrade").getString("id");
-        String lineId = "li-"+id.split("-",2)[1];
-        if (!StorageManager.lines.containsKey(lineId)) return false;
-        String thisline = upgradeitem.getAddress();
-        return StorageManager.lines.get(thisline).getTree().getnext(thisline).contains(lineId);
+        return nbt.getCompound("GUpgrade").hasKey("socket-value");
     }
 
     public GildedItem upgrade(){
@@ -195,6 +173,7 @@ public class UpgradeHandler {
     }
 
     private int getvalue(ItemStack itemStack){
+        if (isSocket(itemStack)) return new NBTItem(itemStack).getCompound("GUpgrade").getInteger("socket-value");
         return new NBTItem(itemStack).getCompound("GUpgrade").getInteger("value");
     }
 

@@ -55,6 +55,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 processResources {
+    buildDir = 'D:\\GildedUpgrade'
     def props = [version: version]
     inputs.properties props
     filteringCharset 'UTF-8'

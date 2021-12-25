@@ -273,12 +273,4 @@ public class BasherAttributeModifier {
         return true;
     }
 
-    private boolean isDouble(String d) {
-        try {
-            Double.parseDouble(d);
-        }catch (NumberFormatException e) {
-            return false;
-        }
-        return true;
-    }
 }

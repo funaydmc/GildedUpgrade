@@ -7,11 +7,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Base64;
-
+import java.util.List;
 public class byteConvert {
 
-    public static String inventoryToString(Inventory inventory) {
+    public static List<String> inventoryToString(Inventory inventory) {
         if (inventory==null) return null;
         int size = inventory.getSize();
         ItemStack[] items = inventory.getContents();
@@ -25,7 +26,19 @@ public class byteConvert {
         sb.append(config.saveToString());
         sb.append("GildedUpgradeConfigPredator");
         sb.append(size);
-        return Base64.getEncoder().encodeToString(sb.toString().getBytes());
+        String source = Base64.getEncoder().encodeToString(sb.toString().getBytes());
+        return split(source,100);
+    }
+
+    public static List<String> split(String s,int w){
+        List<String> l = new ArrayList<>();
+        for (int i=0;i*w<s.length();i++){
+            if ((i+1)*w<s.length())
+                l.add(s.substring(i*w,(i+1)*w));
+            else
+                l.add(s.substring(i*w));
+        }
+        return l;
     }
 
     public static Inventory stringToInventory(String inventoryData) {

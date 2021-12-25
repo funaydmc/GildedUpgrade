@@ -1,10 +1,10 @@
 package me.funayd.gildedupgrade.nbtapi.utils.nmsmappings;
 
-import me.funayd.gildedupgrade.nbtapi.NbtApiException;
-import me.funayd.gildedupgrade.nbtapi.utils.MinecraftVersion;
-
 import java.lang.reflect.Constructor;
 import java.util.logging.Level;
+
+import me.funayd.gildedupgrade.nbtapi.NbtApiException;
+import me.funayd.gildedupgrade.nbtapi.utils.MinecraftVersion;
 
 import static me.funayd.gildedupgrade.nbtapi.utils.MinecraftVersion.getLogger;
 

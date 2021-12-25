@@ -12,7 +12,7 @@ public class Logger {
     }
     @SuppressWarnings("unused")
     public static void Default(String logger) {
-        Bukkit.getLogger().info(Color.vanilla("[Gilded-Upgrade]"+logger));
+        Bukkit.getLogger().info(Color.vanilla("[Gilded-Upgrade] "+logger));
     }
 
 }

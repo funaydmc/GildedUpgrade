@@ -1,14 +1,5 @@
 package me.funayd.gildedupgrade.nbtapi;
 
-import me.funayd.gildedupgrade.nbtapi.utils.GsonWrapper;
-import me.funayd.gildedupgrade.nbtapi.utils.MinecraftVersion;
-import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ClassWrapper;
-import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ObjectCreator;
-import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ReflectionMethod;
-import org.bukkit.block.BlockState;
-import org.bukkit.entity.Entity;
-import org.bukkit.inventory.meta.ItemMeta;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -17,6 +8,16 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
 import java.util.Set;
+
+import org.bukkit.block.BlockState;
+import org.bukkit.entity.Entity;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import me.funayd.gildedupgrade.nbtapi.utils.GsonWrapper;
+import me.funayd.gildedupgrade.nbtapi.utils.MinecraftVersion;
+import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ClassWrapper;
+import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ObjectCreator;
+import me.funayd.gildedupgrade.nbtapi.utils.nmsmappings.ReflectionMethod;
 
 /**
  * Utility class for translating NBTApi calls to reflections into NMS code All
@@ -225,10 +226,17 @@ public class NBTReflectionUtil {
 				Object pos = ObjectCreator.NMS_BLOCKPOSITION.getInstance(tile.getX(), tile.getY(), tile.getZ());
 				o = ReflectionMethod.NMS_WORLD_GET_TILEENTITY.run(nmsworld, pos);
 			}
-			Object tag = ClassWrapper.NMS_NBTTAGCOMPOUND.getClazz().newInstance();
-			Object answer = ReflectionMethod.TILEENTITY_GET_NBT.run(o, tag);
-			if (answer == null)
-				answer = tag;
+			
+			Object answer = null;
+			if(MinecraftVersion.isAtLeastVersion(MinecraftVersion.MC1_18_R1)) {
+			    answer = ReflectionMethod.TILEENTITY_GET_NBT_1181.run(o);
+			} else {
+			    answer = ClassWrapper.NMS_NBTTAGCOMPOUND.getClazz().newInstance();
+			    ReflectionMethod.TILEENTITY_GET_NBT.run(o, answer);
+			}
+			if (answer == null) {
+			    throw new NbtApiException("Unable to get NBTCompound from TileEntity! " + tile + " " + o);
+			}
 			return answer;
 		} catch (Exception e) {
 			throw new NbtApiException("Exception while getting NBTCompound from TileEntity!", e);
@@ -507,7 +515,7 @@ public class NBTReflectionUtil {
 	 * @param value
 	 */
 	public static void setObject(NBTCompound comp, String key, Object value) {
-		if (MinecraftVersion.hasGsonSupport())
+		if (!MinecraftVersion.hasGsonSupport())
 			return;
 		try {
 			String json = GsonWrapper.getString(value);
@@ -526,7 +534,7 @@ public class NBTReflectionUtil {
 	 * @return The loaded Object or null, if not found
 	 */
 	public static <T> T getObject(NBTCompound comp, String key, Class<T> type) {
-		if (MinecraftVersion.hasGsonSupport())
+		if (!MinecraftVersion.hasGsonSupport())
 			return null;
 		String json = (String) getData(comp, ReflectionMethod.COMPOUND_GET_STRING, key);
 		if (json == null) {

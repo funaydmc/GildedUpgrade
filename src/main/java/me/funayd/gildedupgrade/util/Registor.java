@@ -6,6 +6,6 @@ import org.bukkit.event.Listener;
 
 public class Registor {
     public static void listener(Listener listener){
-        Bukkit.getPluginManager().registerEvents(listener, GildedUpgrade.getInstant());
+        Bukkit.getPluginManager().registerEvents(listener, GildedUpgrade.getInstance());
     }
 }
