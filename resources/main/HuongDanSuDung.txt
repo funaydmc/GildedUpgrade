@@ -44,7 +44,7 @@ II-Cơ khí:
 
 III-Cú pháp:
     1. Cây:
-        Các cây được định cấu hình trong tệp tree.yml.
+        Các cây được định cấu hình trong tệp config.yml.
         Nó rất đơn giản. Hãy để tôi lấy một ví dụ:
 
         tr-Sword:

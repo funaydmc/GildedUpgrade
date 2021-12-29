@@ -52,7 +52,7 @@ public class Output {
         config.set("unbreak",unbreak);
         config.set("material",material);
         config.set("fallback", false);
-        config.set("max_level", 10);
+        config.set("max_level", 2);
         if (!CustomModelData.equals("0"))
         config.set("custommodeldata",CustomModelData);
         if (name!=null)
@@ -68,6 +68,8 @@ public class Output {
         if (nbttag!=null) {
             NBTInvert.translate(config, nbttag);
         }
+        config.set("upgrade_event.true","thanhcong");
+        config.set("upgrade_event.false","thatbai");
         config.save(file);
     }
 }

@@ -40,12 +40,11 @@ public class GildedItem {
         return this;
     }
     public void save(){
-        YamlConfiguration config = (YamlConfiguration) YamlFile.ITEMS.get();
         String id = this.ID;
-        config.set(id+".item"   ,item   );
-        config.set(id+".address",address);
-        config.set(id+".version",version);
-        config.set(id+".value"  ,value  );
+        YamlFile.ITEMS.get().set(id+".item"   ,item   );
+        YamlFile.ITEMS.get().set(id+".address",address);
+        YamlFile.ITEMS.get().set(id+".version",version);
+        YamlFile.ITEMS.get().set(id+".value"  ,value  );
         YamlFile.ITEMS.save();
         YamlFile.ITEMS.reload();
     }

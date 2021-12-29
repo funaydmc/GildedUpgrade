@@ -8,12 +8,13 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class Line {
 
     private String id;
-    private final Tree tree;
+    private Tree tree;
     private final List<GildedItem> items;
     private boolean fallback;
     private HashMap<String, getTask> task = new HashMap<>();
@@ -26,8 +27,14 @@ public class Line {
         if (this.items==null) return;
         StorageManager.lines.put(id,this);
     }
-
-
+    public static Line get(String id,Tree tree){
+        if (!StorageManager.lines.containsKey(id)) return null;
+        StorageManager.lines.get(id).setTree(tree);
+        return StorageManager.lines.get(id);
+    }
+    public void setTree(Tree tree) {
+        this.tree = tree;
+    }
 
     public void setFallback(boolean fallback) {
         this.fallback = fallback;
@@ -65,6 +72,7 @@ public class Line {
             i.save();
             item.add(i.getID());
         });
+        if (this.tree!=null)
         c.set(this.id+".tree",this.tree.getId());
         c.set(this.id+".item",item);
         f.save();

@@ -9,6 +9,7 @@ import me.funayd.gildedupgrade.nbtapi.NBTItem;
 import me.funayd.gildedupgrade.runtask.getTask;
 import me.funayd.gildedupgrade.util.*;
 import me.funayd.gildedupgrade.util.generatingid;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -179,9 +180,15 @@ public class Generator {
             else tempitem = null;
             if (tempitem != null) { // nếu item đã tồn tại
                 int oldversion = tempitem.getVersion();
-
                 //kiểm tra phiên bản
-                if (tempitem.getItem().isSimilar(thisiteminfo.getItem()))
+                ItemStack titi = tempitem.getItem().clone();
+                NBTItem titiNBT = new NBTItem(titi);
+                titiNBT.removeKey("GUpgrade");
+                titiNBT.applyNBT(titi);
+                getnbt.viewnbt(titiNBT).forEach(Bukkit.getConsoleSender()::sendMessage);
+                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"====================================");
+                getnbt.viewnbt(new NBTItem(thisiteminfo.getItem())).forEach(Bukkit.getConsoleSender()::sendMessage);
+                if (titi.isSimilar(thisiteminfo.getItem()))
                     thisiteminfo.version(oldversion);  //để phiên bản như cũ nếu không có gì thay đổi
                 else thisiteminfo.version(oldversion+1);//nếu không khớp thì tăng thêm 1
                 thisiteminfo.id(tempitem.getID());  //id như cũ

@@ -39,7 +39,6 @@ public final class GildedUpgrade extends JavaPlugin {
         Lang.load(this);
         if (!setupEconomy()) config.usevaut = false;
         Bukkit.getPluginManager().registerEvents(new ItemUpdate(), this);
-
     }
     @Override
     public void onDisable() {

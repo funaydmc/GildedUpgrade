@@ -89,7 +89,7 @@ public class Commands implements CommandExecutor {
                 "&0&n============================================================",
                 "&aNếu có lỗi,thắc mắc hay yêu cầu cải tiến nào, hãy tạo chủ đề mới trên: " +
                         "&b https://github.com/thuan782004/Gilded_Upgrade/issues " +
-                        "&aHoặc tham gia discord&b https://discord.gg/Mm6wYMR5ES"
+                        "&aHoặc tham gia discord&b https://discord.com/invite/VatBrmDwmf"
         };
         for (String s:message) msg(sender,s);
         return false;

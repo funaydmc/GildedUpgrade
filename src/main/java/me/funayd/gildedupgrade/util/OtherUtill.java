@@ -22,6 +22,9 @@ public class OtherUtill {
     private final GildedUpgrade plugin;
     private final ConsoleCommandSender console;
     private KeyState keyState;
+
+    public KeyState getKeyState() {return KeyState.valueOf(keyState.name());}
+
     public void setKey(String key){this.key=key;}
     public OtherUtill(String key){
         this.plugin = GildedUpgrade.getInstance();
@@ -39,8 +42,7 @@ public class OtherUtill {
     }
     public String getKey(){
         plugin.reloadConfig();
-        key = plugin.getConfig().getString("license");
-        if (key==null||key.equals("XXXX-XXXX-XXXX-XXXX")) key=null;
+        key = plugin.getConfig().getString("license", "XXXX-XXXX-XXXX-XXXX");
         return key;
     }
     public void msg(String msg){
@@ -49,7 +51,7 @@ public class OtherUtill {
         }
     }
     public KeyState getStatus(){
-        keyState = key==null?
+        keyState = key==null||key.equals("XXXX-XXXX-XXXX-XXXX") ?
                    KeyState.NULL:
                    LicenseKey.KeyStatus(key)?
                    LicenseKey.action(key,"enable")?
@@ -77,7 +79,6 @@ public class OtherUtill {
         if (keyState.equals(OtherUtill.KeyState.ACTIVE))
             LicenseKey.action(key, "disable");
     }
-
     public static class LicenseKey {
         public static String plugins = "GildedUpgrade";
         private static final String ip = getIpaddress();

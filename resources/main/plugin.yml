@@ -1,6 +1,6 @@
 name: GildedUpgrade
 api-version: 1.16
-version: '0.4'
+version: '0.4.2'
 main: me.funayd.gildedupgrade.GildedUpgrade
 authors: [ funayd, godcraft998 ]
 commands:

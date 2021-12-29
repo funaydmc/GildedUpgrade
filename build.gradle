@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'me.funayd'
-version = '0.4'
+version = '0.4.2'
 
 repositories {
     mavenCentral()
@@ -26,9 +26,9 @@ configurations {
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
     compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
-    compileOnly 'org.openjdk.nashorn:nashorn-core:15.3'
     compileOnly 'org.jetbrains:annotations:23.0.0'
-    extraLibs 'org.openjdk.nashorn:nashorn-core:15.3'
+    compileOnly 'org.mozilla:rhino-engine:1.7.13'
+    extraLibs 'org.mozilla:rhino-engine:1.7.13'
     extraLibs 'org.jetbrains:annotations:23.0.0'
 }
 jar {

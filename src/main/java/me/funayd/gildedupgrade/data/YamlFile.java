@@ -39,6 +39,7 @@ public enum YamlFile {
     public void save() {
         try {
             get().save(file);
+            System.out.println("saving "+name);
         }catch (IOException e) {
             Logger.Info("&eCould not save config to " + file);
         }

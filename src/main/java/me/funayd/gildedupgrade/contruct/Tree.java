@@ -1,8 +1,11 @@
 package me.funayd.gildedupgrade.contruct;
 
+import me.funayd.gildedupgrade.GildedUpgrade;
+import me.funayd.gildedupgrade.data.DataLoader;
 import me.funayd.gildedupgrade.data.StorageManager;
 import me.funayd.gildedupgrade.util.Debug;
 import me.funayd.gildedupgrade.util.Logger;
+import me.funayd.gildedupgrade.util.OtherUtill;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.*;
@@ -36,15 +39,18 @@ public class Tree {
     private void loadLine(String s, ConfigurationSection c){
         if (c.isString(s)) {
             if (tree.keySet().size()==0){
-                tree.put(new Line(s,this),new HashSet<>());
+                tree.put(Line.get(s,this),new HashSet<>());
                 return;
             }
             return;
         }
         Set<String> lineid = Objects.requireNonNull(c.getConfigurationSection(s)).getKeys(false);
         Set<Line> lines = new HashSet<>();
-        lineid.forEach(ss -> lines.add(new Line(ss,this)));
-        tree.put(new Line(s,this),lines);
+        for (String ss : lineid) {
+            lines.add(Line.get(ss,this));
+            if (!GildedUpgrade.getActivator().getKeyState().equals(OtherUtill.KeyState.ACTIVE)) break;
+        }
+        tree.put(Line.get(s,this),lines);
         recursive(Objects.requireNonNull(c.getConfigurationSection(s)));
     }
 
