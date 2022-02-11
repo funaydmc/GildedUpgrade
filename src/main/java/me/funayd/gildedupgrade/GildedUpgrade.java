@@ -7,7 +7,6 @@ import me.funayd.gildedupgrade.command.Commands;
 import me.funayd.gildedupgrade.command.TabComplete;
 import me.funayd.gildedupgrade.data.*;
 import me.funayd.gildedupgrade.nbtapi.utils.MinecraftVersion;
-import me.funayd.gildedupgrade.util.OtherUtill;
 import me.funayd.gildedupgrade.util.JavaScript;
 import me.funayd.gildedupgrade.util.Logger;
 import net.milkbowl.vault.economy.Economy;
@@ -22,33 +21,28 @@ import java.io.IOException;
 
 public final class GildedUpgrade extends JavaPlugin {
 
-    public static OtherUtill activator;
-
     private static GildedUpgrade instance;
     private static Economy econ;
     public static final JavaScript engine = new JavaScript();
     @Override
     public void onEnable() {
         instance = this;
-        MinecraftVersion.getVersion();
+        MinecraftVersion.getVersion();  // load nms
         this.saveDefaultConfig();
         new Commands(instance);
         new TabComplete();
-        createDefault();
-        reload();
+        createDefault();  //create default file
+        reload(); //load config
         Lang.load(this);
-        if (!setupEconomy()) config.usevaut = false;
+        if (!setupEconomy()) config.usevaut = false; //vault hook
         Bukkit.getPluginManager().registerEvents(new ItemUpdate(), this);
     }
     @Override
     public void onDisable() {
         Bukkit.getPluginManager().callEvent(new DisableEvent());
-        activator.disable();
     }
     public static void reload(){
         instance.reloadConfig();
-        String key = instance.getConfig().getString("license", "XXXX-XXXX-XXXX-XXXX");
-        activator = new OtherUtill(key);
         StorageManager.clear();
         config.loadconfig();
         DataLoader.load();
@@ -71,9 +65,19 @@ public final class GildedUpgrade extends JavaPlugin {
         a.set("gui_data", DefaultInventory.getBase64());
         saveGui(a);
     }
+
+    /**
+     *
+     * @return dữ liệu yaml của gui
+     */
     public static YamlConfiguration guiConfig(){
         return YamlConfiguration.loadConfiguration(new File(instance.getDataFolder(),"gui.yml"));
     }
+
+    /**
+     * lưu gui mặc định vào file
+     * @param a dữ liệu yaml của gui
+     */
     public static void saveGui(YamlConfiguration a){
         try {
             a.save(new File(instance.getDataFolder(),"gui.yml"));
@@ -95,9 +99,5 @@ public final class GildedUpgrade extends JavaPlugin {
     }
     public static Economy geteco(){
         return econ;
-    }
-
-    public static OtherUtill getActivator() {
-        return activator;
     }
 }

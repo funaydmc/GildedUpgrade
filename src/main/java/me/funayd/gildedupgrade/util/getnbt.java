@@ -1,9 +1,11 @@
 package me.funayd.gildedupgrade.util;
 
 import me.funayd.gildedupgrade.nbtapi.NBTCompound;
+import me.funayd.gildedupgrade.nbtapi.NBTType;
 import net.md_5.bungee.api.ChatColor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -35,7 +37,24 @@ public class getnbt {  // cái này là để debug thôi
                 case NBTTagDouble:
                     data.add(ChatColor.AQUA+"double-"+key+": "+nbt.getDouble(key));
                     break;
-
+                case NBTTagByte:
+                    data.add(ChatColor.AQUA+"byte-"+key+": "+nbt.getByte(key));
+                    break;
+                case NBTTagByteArray:
+                    data.add(ChatColor.AQUA+"byteArray-"+key+": "+ Arrays.toString(nbt.getByteArray(key)));
+                    break;
+                case NBTTagLong:
+                    data.add(ChatColor.AQUA+"long-"+key+": "+ nbt.getLong(key));
+                    break;
+                case NBTTagShort:
+                    data.add(ChatColor.AQUA+"short-"+key+": "+ nbt.getShort(key));
+                    break;
+                case NBTTagIntArray:
+                    data.add(ChatColor.AQUA+"intArray-"+key+": "+ Arrays.toString(nbt.getIntArray(key)));
+                    break;
+                case NBTTagEnd:
+                    data.add(ChatColor.YELLOW+"----------END---------");
+                    break;
                 case NBTTagList:
                     switch (nbt.getListType(key)){
                         case NBTTagString:
@@ -66,6 +85,16 @@ public class getnbt {  // cái này là để debug thôi
                             floatlist.forEach(i -> stringList2.add(ChatColor.AQUA+"- "+ i));
                             data.addAll(stringList2);
                             break;
+                        case NBTTagLong:
+                            data.add(ChatColor.AQUA+"listlong-"+key+": ");
+                            List<Long> longList =  nbt.getLongList(key);
+                            List<String> stringList3  =  new ArrayList<>();
+                            longList.forEach(i -> stringList3.add(ChatColor.AQUA+"- "+ i));
+                            data.addAll(stringList3);
+                            break;
+                        case NBTTagEnd:
+                            data.add(ChatColor.YELLOW+"-----EndList-----");
+                            break;
                         case NBTTagCompound:
                             data.add(ChatColor.AQUA+"listcompound-"+key+": ");
                             List<String> compoundlist = new ArrayList<>();
@@ -81,7 +110,12 @@ public class getnbt {  // cái này là để debug thôi
                             });
                             data.addAll(compoundlist);
                             break;
+                        default:
+                            data.add(ChatColor.RED+"strangeData: "+nbt.getString(key));
             }
+                    break;
+                default:
+                    data.add(ChatColor.RED+"strangeData: "+nbt.getString(key));
         }
     }
         return data;

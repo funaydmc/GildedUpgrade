@@ -1,14 +1,13 @@
 name: GildedUpgrade
+main: me.funayd.gildedupgrade.GildedUpgrade
 api-version: 1.16
 version: '${version}'
-main: me.funayd.gildedupgrade.GildedUpgrade
 authors: [ funayd, godcraft998 ]
 commands:
   gildedupgrade:
     description: Main-Command
     aliases: [gu, gUpgrade]
     permission: "gildedupgrade.use"
-
 
 permissions:
   gildedupgrade.admin:

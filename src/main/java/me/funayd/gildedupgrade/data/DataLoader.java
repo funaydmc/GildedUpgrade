@@ -24,7 +24,6 @@ public class DataLoader {
                 if (s2.length==2){
                     if (!StorageManager.lines.containsKey(s2[0])){
                         new Line(s2[0],null).save();
-                        if (!GildedUpgrade.getActivator().getStatus().equals(OtherUtill.KeyState.ACTIVE)) break;    
                     }
                 }
             }
@@ -35,7 +34,6 @@ public class DataLoader {
         if (s!=null) {
             for (String k : s.getKeys(false)) {
                 StorageManager.trees.put(k, new Tree(k).load(s.getConfigurationSection(k)));
-                if (!GildedUpgrade.getActivator().getStatus().equals(OtherUtill.KeyState.ACTIVE)) break;
 
             }
         }

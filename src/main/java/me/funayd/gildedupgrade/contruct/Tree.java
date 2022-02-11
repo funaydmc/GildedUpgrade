@@ -48,7 +48,6 @@ public class Tree {
         Set<Line> lines = new HashSet<>();
         for (String ss : lineid) {
             lines.add(Line.get(ss,this));
-            if (!GildedUpgrade.getActivator().getKeyState().equals(OtherUtill.KeyState.ACTIVE)) break;
         }
         tree.put(Line.get(s,this),lines);
         recursive(Objects.requireNonNull(c.getConfigurationSection(s)));
