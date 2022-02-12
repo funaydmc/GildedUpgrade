@@ -1,0 +1,104 @@
+I-Bắt đầu nhanh:
+    1. tạo generator:
+        Có hai mục nhập bắt buộc trong generator. đó là giá trị và vật liệu.
+        Tên của tệp generator khi phần mở rộng bị xóa là id của generator.
+        Có một generator mẫu được tạo khi plugin được tải lần đầu tiên. Bạn có thể tham khảo nó.
+    2. Làm cây:
+        Sử dụng ID dòng để đại diện cho toàn bộ dòng.
+        ID dòng là ID của generator với "li-" ở phía trước.
+        Các dòng ở cuối chuỗi nâng cấp phải được đánh dấu "kết thúc".
+        Các dòng sau là con của dòng trước. Một dòng có thể có nhiều dòng phụ.
+        Mỗi cây chỉ được có 1 dòng ở cấp đầu tiên làm gốc để plugin hoạt động tốt.
+    3. Tải:
+        Mọi thứ được tải tự động khi plugin đang hoạt động hoặc khi bạn sử dụng lệnh tải.
+
+II-Cơ khí:
+    1. Giá trị là gì?
+        Mỗi mục hoặc socket có một giá trị. Giá trị này được sử dụng để tính toán xác suất thành công
+        nâng cấp của mặt hàng. Tỷ lệ thành công được tính như sau:
+
+        - x là giá trị trung bình của cấp độ hiện tại và các cấp độ tiếp theo
+        - Y là giá trị của socket
+        - C là tỷ lệ thành công. Mặc định là KHÔNG.
+
+        C = C + (100 - C) * (Y / (Y + X))
+        Tỷ lệ được tính trên từng socket một cho đến hết.
+
+        Ví dụ: hãy lấy một mục A có giá trị là 100. Lấy thêm ba socket có giá trị
+        50, 100 và 75 tương ứng.
+        Tỷ lệ mặc định là 0.
+        Bắt đầu với giá trị là 50. 0+ (100-0) * (50 / (50 + 100)) -> Tỷ lệ hiện là 33, (3)%
+        Tiếp tục với giá trị là 100. 33, (3) + (100-33, (3)) * (100 / (100 + 100)) -> Tỷ lệ hiện là 66, (6)%
+        Tiếp tục với giá trị có giá trị là 75. Bạn có thể tự tính toán nó;) (Tỷ lệ hiện là 80,95%)
+
+    2. ticket là gì?
+        Một vật phẩm cấp độ cuối cùng có thể được nâng cấp thành một hoặc nhiều vật phẩm khác nhau. Tấm ticket sẽ đảm bảo rằng
+        mục được nâng cấp thành mục đầu tiên trong dòng có cùng id với id của ticket.
+        Rất đơn giản. Bên phải?
+
+    3. Điều gì xảy ra nếu tôi muốn chỉnh sửa một mục đã được phát hành?
+        Khi bạn chỉnh sửa generator rồi tải lại, khi người chơi nhấp vào bất kỳ mục nào trên kho,
+        các mục được tạo bởi generator đó sẽ thay đổi tương ứng. Tương tự, khi bạn không muốn
+        người chơi để sử dụng chuỗi vật phẩm đó nữa, bạn có thể điều chỉnh generator để biến toàn bộ
+        hàng loạt các mặt hàng thành một cái gì đó vô dụng. ;)
+
+III-Cú pháp:
+    1. Cây:
+        Các cây được định cấu hình trong tệp config.yml.
+        Nó rất đơn giản. Hãy để tôi lấy một ví dụ:
+
+        tr-Sword:
+            li-Wooden_Sword:
+
+                li-Iron_Sword:
+                    li-Wakizashi: end
+                    li-Oodashi: end
+                    li-Nagamaki: end
+                    li-Naginata: end
+
+                li-Steel_Sword: end
+
+        Như bạn thấy, một cây bắt đầu bằng ID của cây đó. Vì lý do nào đó mà ID cây
+        phải bắt đầu bằng "tr-". Sau đó, chúng ta thêm các dòng lần lượt. Các dòng này sẽ tự động
+        được tạo dựa trên generator tương ứng với ID của dòng đó. Các dòng tại
+        end, tức là những dòng không thể nâng cấp được nữa, phải được đánh dấu là "end" (bạn có thể viết
+        bất cứ điều gì, không nhất thiết phải là "end". Nhưng đừng để trống).
+
+    2. generator:
+        Mọi thứ đã có trong tệp "Example.yml" nhưng bây giờ tôi sẽ giải thích rõ hơn.
+
+        Như đã đề cập ở phần đầu, hai thành phần thiết yếu của generator là vật liệu
+        và giá trị. generator sẽ không được tải nếu thiếu hai mục này.
+
+        Hãy bắt đầu với "Cấp độ".
+        Cấp độ là cấp độ của mặt hàng.
+        Cấp được biểu thị bằng "{level}".
+        Cấp là một số tự nhiên bắt đầu từ 1.
+        Đó là tất cả. Vâng, nó rất đơn giản.
+
+        Tiếp theo là Script.
+        Tập lệnh được đặt giữa hai ký tự @.
+        Tập lệnh với cú pháp dựa trên ngôn ngữ JavaScript.
+        Tập lệnh có thể trả về giá trị số, lôgic hoặc chuỗi. Đặc biệt
+        có một số nơi mà Script sẽ không hoạt động bình thường nếu không trả về một int
+        chẳng hạn như giá trị, cấp độ enchant hoặc Dữ liệu mô hình tùy chỉnh. Tại những nơi này, giá trị sẽ là
+        làm tròn thành int.
+        đây là ví dụ: @ d = \"blank \"; if ({level} == 10) d = \"WoW! Đây là điểm cuối cùng! \"; NS @
+        Hoặc nhanh hơn: @ ({level} == 10)? \"trống \": \ "Chà! Đây là lớp cuối cấp! \" @
+        Vì bạn đang viết tập lệnh trên một chuỗi, bạn không thể viết ". Thay vào đó, hãy viết \".
+        (Chỉ Lore) Bạn có thể sử dụng '/n' để ngắt dòng. Hoặc để nó là 'trống' để tạo dòng đó
+        không tồn tại. Tại sao bạn phải làm như vậy? Bạn sẽ biết sớm thôi.
+
+
+    3. Bộ lọc:
+        Trong hầu hết các bộ phận của bộ lọc generator được áp dụng. Mức độ ưu tiên cao nhất là {level}, tiếp theo là
+        script và cuối cùng là người giữ. Bạn có thể kết hợp tất cả các bộ lọc để tạo ra các tùy chỉnh thú vị.
+        holder:
+            lore:
+            - this is normal lore
+            - this is normal lore too
+            - @({level}==10) ? @
+
+            holder:
+                final: Extra lore
+                null: ''

@@ -66,7 +66,10 @@ public class UpgradeHandler {
     }
     public boolean isSocket     (ItemStack socket)      {
         NBTItem nbt = new NBTItem(socket);
-        return nbt.getCompound("GUpgrade").hasKey("socket-value");
+        if (nbt.getCompound() != null) {
+            return nbt.getCompound("GUpgrade").hasKey("socket-value");
+        }
+        return false;
     }
 
     public GildedItem upgrade(){
