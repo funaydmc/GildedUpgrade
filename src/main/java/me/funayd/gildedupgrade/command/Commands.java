@@ -142,15 +142,34 @@ public class Commands implements CommandExecutor {
             return false;
         }
         if (args.length<2) {
-            sender.sendMessage("/gu setsocket <giá trị>");
+            sender.sendMessage("/gu setsocket <giá trị> - thiết lập item trên tay thành socket");
+            sender.sendMessage("/gu setsocket <id> <giá trị> - thiết lập item trên tay thành socket và lưu vào 'storage.socket.yml'");
             return false;
         }
         Player player = (Player) sender;
+        switch (args.length) {
+            case 2: return m1(player, args);
+            case 3: return m2(player, args);
+        }
+        return true;
+    }
+
+    private boolean m1(Player player, String[] args) {
         if (!checknum.isInt(args[1])) {
             player.sendMessage(Color.vanilla("Giá trị phải là số nguyên"));
             return false;
         }
         setOther.socket(player, Integer.parseInt(args[1]));
+        return true;
+    }
+    
+    private boolean m2(Player player, String[] args) {
+        String id = args[1];
+        if (!checknum.isInt(args[2])) {
+            player.sendMessage(Color.vanilla("Giá trị phải là số nguyên"));
+            return false;
+        }
+        setOther.socket(player, id, Integer.parseInt(args[1]));
         return true;
     }
 

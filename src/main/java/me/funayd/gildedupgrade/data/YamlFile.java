@@ -14,7 +14,8 @@ import java.io.InputStreamReader;
 
 public enum YamlFile {
     ITEMS("storage/items.yml"),
-    LINES("storage/lines.yml");
+    LINES("storage/lines.yml"),
+    SOCKET("storage/socket.yml");
 
     private final String name;
     private FileConfiguration config;

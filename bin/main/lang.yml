@@ -4,7 +4,7 @@ help:
   - '&e/gu&f: Mở menu nâng cấp'
   - '&e/gu get <line> <level>&f: Lấy một item đã được tải'
   - '&e/gu edit&f: Tùy chỉnh upgrade gui'
-  - '&e/gu load&f: Tải lại tất cat item'
+  - '&e/gu load&f: Tải lại tất cả item'
   - '&e/gu debug&f: Bật/Tắt chế độ gỡ lỗi'
   - '&e/gu getnext&f: Lấy vật phẩm cấp'
   - '&e/gu generator&f: Thao tác với generator'
